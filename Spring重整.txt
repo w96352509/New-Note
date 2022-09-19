@@ -1,0 +1,102 @@
+何謂框架
+  - 框 : 範圍(解決一部分範圍內的問題)
+  - 架 : 支撐(實現開發流程)
+  - 框架 : 技術解決與整合方案的半成品
+
+Spring 創作目的
+  
+  - 非侵入式程式設計架構
+      - POJO(Plain old Java Object)     // 普通的 Java 物件解不受任何限制
+      - 業務邏輯程式 , 不含框架程式碼 	// 資源配置都在 applicationContent.xml
+      - 讓業務邏輯可以自由移出各框架
+	  - 讓設定檔定義 class 意義
+  
+  - 管理物件生命週期
+      - 透過 xml 的配置並建立物件依賴關係
+
+一站 Web 應用框架
+  - 表現層    (Web層)
+      - SpringMVC
+  - 業務邏輯層(Service層)
+      - Spring
+  - 資料訪問層
+      - SpringORM(DAO層) : JPA / HibernateTrmplate / MyBaits
+
+特性:
+  - 輕量級 Framwork
+      - 重量級 and 輕量級 : 是否相依容器
+        Servlet    Spring
+      
+	  - 不相依特定 JavaEE
+      - 單純地將元件部屬到 spring 中  	  
+
+模組:
+  - AOP 攔截器 / ORM / DAO / Web / Context / MVC
+  -              Spring Core
+
+技術名詞(重要):
+  - Java靜態 new / 動態 Class.forname()
+  - IOC 反轉注入 配置於 spring 檔中的物件 擁有第三方來保證創建物建 , 容易管理生命週期
+  - DI  依賴注入 建構子 / setter
+  - AOP	方面導向 
+
+** 傳統上每個對象都是自行獲取他所依賴的對象 , 使用 DI 每個所依賴的對象不在由自身呼叫 , 統一由一個外部實體創建 **
+   系統中模組建議依賴抽象，因為各個模組間不需要知道對方太多細節（實作），知道越多耦合越強。
+   在使用IOC容器前需先了解雙方的依賴關係(誰依賴誰?)
+
+Spring 的基本思想：控制反轉/依賴注入（IoC/DI）
+  - 控制反轉(Inversion of Control) :
+      
+	  0. 控制反轉是一個設計思想 ，把對於某個物件的控制權移轉給第三方容器 
+      
+      1. 降低A對B物件的耦合性，讓雙方都倚賴第三方容器
+         // User -> IOC -> A/B/C	  
+	  
+  
+  - 依賴注入(Dependency Injection)
+      
+	  0. 把被依賴物件注入被動接收物件中
+	  
+	  1. 範例 : 小明(被動接收物件) / 打掃阿姨(被依賴物件) / 打掃公司(IOC)
+	     1-1  : 小明去找一個清潔阿姨(DI)
+		 1-2  : 小明透過打掃公司去找一個清潔阿姨假如今天A阿姨請假了，公司會自動找另一個符合需求B阿姨幫忙打掃...
+	            
+
+使用 IOC / DI 之前 : (class A / class B)
+ 範例 :
+ public class A { 
+     public void methodA(){
+         // A 邏輯 ....
+         // 需使用 class B 執行 B 邏輯
+         // 注意重點 : A 是要怎麼獲取 B 的引用 
+         B b = new B();
+         b.methodB();		 
+         }
+ }
+ 結語 : 由於 class A 直接編寫 class B 的構造(或獲取了 class B 的程式) , 則 A B 變成了耦合的方式
+ 耦合 : 由於 class A 直接編寫 class B 的構造(或獲取了 class B 的程式) , 不得不更改 class A 的程式
+        A(<-()B // A 的內部被 B 插入
+
+ 工廠 : class(方法) implements interface 再創建 FactoryClass(實體) 來呼叫 class     範例 : spring.core.solid.dip.before  
+ DI   : class(方法) implements interface 再創建 class(實體)        來呼叫 interface 範例 : spring.core.solid.dip.sol
+ 優點 : 細部改動時可以不用更改 class(實體)
+
+應用 IOC / DI : (class A / class B)        
+ 範例 :
+ public class A { 
+     
+	 @Autowired
+	 private B b;
+	 
+     public void methodA(){
+         // A 邏輯 ....
+         
+		 // 執行 B 邏輯
+         b.methodB();     	 
+         }
+ } 
+ 結語 : 更改 B 時不更動到 A 的程式碼 // 舉例 class B 更改建構式時要大量更改
+ 松耦 : A <-> B // A 類沒有獲取 B 類的代碼
+
+松耦合的好處 : 测试需求(因需求會改變)
+IoC 造成問題 : 整個系統會跟容器耦合 Main <- container -> A / B / C 
