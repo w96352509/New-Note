@@ -11,3 +11,5 @@
 BeanDefination(是存放 Bean 位置) ?
 
 Spring 容器 : ApplicationContext ?
+
+BeanDefinition 用處?
