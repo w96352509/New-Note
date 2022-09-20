@@ -1,4 +1,6 @@
-9/20 spring IOC / DI 概念
+目標 : spring 概念 / 設計模式改善程式碼 / 微算計相關
+9/20 spring IOC DI 概念 / spring Bean 概念(待加強)
+
 
 練習檔 : https://github.com/w96352509/springHome
 
