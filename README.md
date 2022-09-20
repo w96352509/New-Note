@@ -15,3 +15,5 @@ Spring IOC 容器是 ApplicationContext ?
 BeanDefinition 用處是拿取 Bean 訊息嗎?
 
 createApplicationContext() 建立 web 的上下文?
+
+ConfigurableApplicationContext	重再針對 Bean 屬性配置 ?
