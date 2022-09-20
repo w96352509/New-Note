@@ -1,0 +1,106 @@
+Spring 的核心： Bean 容器
+重點 : 
+  POJO / Configuration data -> Spring IOC Container(ApplicationContext = new ...()) -> 產出 Bean(存放於 BeanDefination 實例) 
+
+ 1. 由 Spring IoC 容器 , 組裝 , 管理對象 -> Bean(Spring 所創建以及管理的對象)
+    // POJO / Configuration data -> Spring IOC Container(ApplicationContext = new ...()) -> 產出 Bean(存放於 BeanDefination) 
+
+ 2. Spring IoC 實現的最基本功能是對象創建與注入
+      
+	  1. 獲取 Bean 定義訊息
+      
+      2. 根據 Bean 定義訊息創建 Bean
+
+
+ 3. 獲取 bean 訊息 (BeanDefination) 
+
+      1. xml 形式 : 
+	       1. <bean id="hello"  class="com.spring.core.session01.beans.Hello"></bean> 
+           2. 各配置方式 : https://github.com/w96352509/springHome/blob/master/spring.core/conf/applicationContext.xml	
+                	   
+	  2. Annotation 形式 : 
+	       1. @Configuration class -> @Bean(name ="") method
+		   2. @Component     class -> @Autowired method (調用方法) 
+		      // 被 @Component 會被 spring 自動加入 Bean 管理 , @Autowired 可以自動跟找到適合的 Bean
+			  
+      3. 解析並加載 Bean
+	       1. ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml"); // xml
+           2. ApplicationContext ctx2 = new AnnotationConfigApplicationContext(HelloConfig.class);   // Annotation		   
+
+ 4. IoC 容器： BeanFactory vs ApplicationContext
+      
+	  1. ApplicationContext extend BeanFactory // ApplicationContext 更全面  
+      
+      2. Spring -> xml or Annotation Bean -> 儲存於 BeanDefination 實例中(instantiate)
+
+ 5. BeanDefination	
+    
+      0. 通過 xml or Annotation 獲取 Bean 資訊後 , 最终会被存储在一个 BeanDefination 的實例中
+ 
+      1. BeanDefinition 算是取得 Bean 訊息的接口  
+       
+      2. BeanDefinition(介面) 實作 AbstractBeanDefinition extend (以下三種)
+           1. RootBeanDefinition    ->  @Annotation / xml 
+           2. ChildBeanDefinition   ->  xml
+           3. GenericBeanDefinition ->  得到 BeanDefinition 內容(?)	
+
+      
+ 6. BeanDefinition 的管理
+ 
+      1. BeanDefination 概念 : 通过 xml 和 annotation 获取到 Bean 的描述信息后最終儲存形式 
+      	  
+	  2. 啟動 SpringApplication.run(SpringBootPsi2022Application.class, args); 
+           1. 568 行 : ConfigurableApplicationContext createApplicationContext() // 建立 web 的上下文?
+		    
+		   2. createApplicationContext() 執行後 beanDefinitionMap 生產 :
+               org.springframework.context.annotation.internalConfigurationAnnotationProcessor
+               org.springframework.context.annotation.internalAutowiredAnnotationProcessor
+               org.springframework.context.annotation.internalCommonAnnotationProcessor
+               org.springframework.context.annotation.internalPersistenceAnnotationProcessor
+               org.springframework.context.event.internalEventListenerProcessor
+               org.springframework.context.event.internalEventListenerFactory  		   
+		       
+			   // 得到以上 範例 : sts4 : SpringBoot-PSI-2022 -> test
+			   for(String s : ctx.getBeanDefinitionNames()) {
+			       System.out.println(s);
+		       }
+          
+		  3. protected ConfigurableApplicationContext createApplicationContext(){
+		       Class<?> contextClass = this.applicationContextClass;
+		       if (contextClass == null) {
+			     try {
+				  switch (this.webApplicationType) {
+				  case SERVLET:
+					contextClass = Class.forName(DEFAULT_SERVLET_WEB_CONTEXT_CLASS); 
+					// AnnotationConfigApplicationContext 
+					
+					break;
+				  case REACTIVE:
+					contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS); 
+					// AnnotationConfigServletWebServerApplicationContext
+					
+					break;
+				  default:
+					contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);
+				    // AnnotationConfigReactiveWebServerApplicationContext
+				  }
+			    }
+               // 實例操作		  
+		       return (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);
+		     }
+			  // 簡單說 : createApplicationContext() 透過 ConfigurableApplicationContext 產生實例
+			  // 實例共有(3種)
+       
+      3. 總結 : run() -> 
+	         -> createApplicationContext() 最終觸發 : AnnotationConfigUtils.registerAnnotationConfigProcessors(...)
+                  // 該方法調用 6 種固定加載的 Bean 以上 6 種(配置註解得處理器也在其中) 
+			 -> prepareContext(...) 方法 , 額外將 SpringBoot 啟動類作為 BeanDefination 添加到容器中
+				  // 啟動類 Annotation : @Configuration , 就是 SpringBoot 應用得入口配置文件
+			 -> refreshContext(...) 方法 : 
+			      // 步驟 invokeBeanFactoryPostProcessors 會觸發 ConfigurationClassPostProcessor 執行
+                  // 進一步觸發 SpringBoot 解析 , 由於 SpringBoot 啟動類被 @ComponentScan 
+                  // 所以會觸發 ComponentScan 操作將 classPath 指定 basePackage	讀取解析為 BeanDefination
+                  // 註冊到容器中					  
+			 
+            
+		    		   
