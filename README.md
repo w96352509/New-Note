@@ -4,4 +4,4 @@
 
 紀錄沒聽過的詞 : mock(java 測試框架)
 
-英文加強 : instantiate 實例 / Defination(定義)
+英文加強 : instantiate(實例) / Defination(定義) / Generic(通用)
