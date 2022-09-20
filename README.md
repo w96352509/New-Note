@@ -22,6 +22,6 @@ ConfigurableApplicationContext	重再針對 Bean 屬性配置 ?
 
 Bean 的生產步驟 
 
-實例化 Bean 等
+實例化 Bean 等步驟?
 
-工廠 Bean
+工廠 Bean 的優點?
