@@ -1,4 +1,5 @@
 Spring 的核心： Bean 容器
+參考 :　https://blog.csdn.net/lengxiao1993/article/details/103512714
 重點 : 
   POJO / Configuration data -> Spring IOC Container(ApplicationContext = new ...()) -> 產出 Bean(存放於 BeanDefination 實例) 
 
@@ -45,7 +46,7 @@ Spring 的核心： Bean 容器
            3. GenericBeanDefinition ->  得到 BeanDefinition 內容(?)	
 
       
- 6. BeanDefinition 的管理
+ 6. BeanDefinition 的管理(看不懂)
  
       1. BeanDefination 概念 : 通过 xml 和 annotation 获取到 Bean 的描述信息后最終儲存形式 
       	  
@@ -100,7 +101,70 @@ Spring 的核心： Bean 容器
 			      // 步驟 invokeBeanFactoryPostProcessors 會觸發 ConfigurationClassPostProcessor 執行
                   // 進一步觸發 SpringBoot 解析 , 由於 SpringBoot 啟動類被 @ComponentScan 
                   // 所以會觸發 ComponentScan 操作將 classPath 指定 basePackage	讀取解析為 BeanDefination
-                  // 註冊到容器中					  
+                  // 註冊到容器中	
+      
+	  4. Bean 的實例化(看不懂)
+      
+	  5. 普通 Bean 與 工廠 Bean				  
+		   
+		   1. 普通 Bean : 由 Spring 容器注入到依賴對象 
+		   
+		   2. 工廠 Bean : 由 bean 本身產生 bean , 注入是產生的 bean , 產生的 bean 不屬於 spring 容器中
+		      // 由 getObject 取得物件
+              // class implements FactoryBean<>
+			  
+			  (物件) : class Car : String name / Integer price
+			  
+			  (工廠) : class CarFactory :
+			    public class CarFactory implements FactoryBean<Car>  {
+
+					@Override
+					public Car getObject() throws Exception {
+						
+						return new Car("BMW" , 10000000);
+					}
+
+					@Override
+					public Class<?> getObjectType() {
+						
+						return Car.class;
+					}
+
+					@Override
+					public boolean isSingleton() {
+						// TODO Auto-generated method stub
+						return false;
+					}
+
+				}
+              
+			  實作 xml : 
+			    <bean id="car" class="com.spring.core.session03.beans.CarFactory"></bean>  
+              
+			  實作 java :
+			    @Configuration
+				public class CarFactoryConfig {
+
+					@Bean(name = "car2")
+					public CarFactory carFactory()  {
+						CarFactory carFactory = new CarFactory();
+						System.out.println("工廠Java");
+						return carFactory;
+					}
+					
+				} 
 			 
+			  
+			  呼叫 :
+			
+  			    // Xml
+                ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationcontext.xml");
+				Car car = ctx.getBean("car", Car.class);
+				System.out.println(car);  			  　　　　	 
             
+			    // JavaConfig
+			    ApplicationContext ctx2 = new AnnotationConfigApplicationContext(CarFactoryConfig.class);
+				Car car2 = ctx2.getBean("car2", Car.class);
+				car2.setName("HH");
+				System.out.println(car2);
 		    		   
