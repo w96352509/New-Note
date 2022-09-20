@@ -17,3 +17,9 @@ BeanDefinition 用處是拿取 Bean 訊息嗎?
 createApplicationContext() 建立 web 的上下文?
 
 ConfigurableApplicationContext	重再針對 Bean 屬性配置 ?
+
+Bean 的生產步驟 
+
+實例化 Bean 等
+
+工廠 Bean
