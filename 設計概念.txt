@@ -1,0 +1,55 @@
+設計概念 :
+ 1. 把可能需要變動的程式獨立出來
+ 2. 方法針對介面處理 // "執行時"期動態的"改變"
+
+-------------------------------------------------------------------
+使用介面的用意 :
+ 關鍵 "多型" -> 執行時會根據情況到真正的行為不會被綁死到超類別 -(得知)> 變數宣告應該是超類型(抽象 or 介面)
+             -> 意味 : 宣告時不用理會執行後的物件型態
+
+-------------------------------------------------------------------
+普通工廠模式 :
+  前言 : 你跟工廠說你想要的那種規格的商品      // 商品由工廠產生 
+         而工廠負責製造你想要的那種規格的商品  // 工廠提供客製化方法
+  
+  優點 : 客製化 / 工廠類用於建立物件 / 只需要知道具體產品類名(Duck) / 防止對資料的破壞實現多型((DuckFactoryImpl)duckFactory)
+  
+  範本 : 
+    
+	Product : 
+	         介面 : Duck -> void NarrativeDuck();
+             類別 : DuckImpl implements Duck -> String type / 有無參數建構式 / 覆寫 NarrativeDuck();
+    
+	Factory :
+             介面 : DuckFactory -> Duck getDuck();
+             類別 :	DuckFactoryImpl implements DuckFactory -> 覆寫 Duck getDuck() return new Duck; / 
+			                                                  超載 Duck getDuck(String type) return new Duck(type); 
+    Main :
+             1. 呼叫工廠               -> DuckFactory duckFactory = new DuckFactoryImpl(); 	
+             2. 由工廠產生商品         -> Duck duck  = duckFactory.getDuck();
+			 3. 由工廠產生商品(客製化) -> Duck duck2 = ((DuckFactoryImpl)duckFactory).getDuck("塑膠鴨");
+			 4. 實現產品方法           -> duck.NarrativeDuck(); / duck2.NarrativeDuck();
+    
+	總計 : 由 Main 得知 -> 使用者只需要知道 工廠類方法 / 產品類     			 
+
+------------------------------------------------------------------- 
+書本第一章(鴨子模擬器) : 了解設計模式
+  零設計模式 :
+    一.
+      class Duck : quack() / swim() / abstract display()  // 所有鴨都會 quack() / swim() , 每種鴨外觀不同 display()
+      class plasticDuck / RedheadDuck extends Duck
+     
+	二. 加入 fly() 方法
+      class Duck : quack() / swim() / fly() / abstract display() // 所有鴨都會 quack() / swim() , 每種鴨外觀不同 display() 	 
+      class plasticDuck / RedheadDuck / RubberDuck extends Duck  // RubberDuck 不會飛(問題發生)
+	  
+    
+	導致 : 多次重複 / 不意改變 / 難以得知全部行為 / 改變導致全不受影響 
+	結語 : 由此得知涉及<維護> 為了<再利用> 使用 extends 不會有好結果
+
+  優化 1 -> 把可能需要變動的程式獨立出來 (quack() / fly()) 並提供介面讓細部動作去實做
+    一.
+     interface : Fly -> fly()     <--- FlyYes -> fly(實踐飛行) / FlyNo -> fly(啥都不做) 
+	 interface : Quack -> quack() <--- YesQuack -> quack(叫)   / YesQuack -> quack(不叫) / 等等叫聲...
+     // 讓 Fly 與 Quack 物件可被再三利用 , 新增細部功能時也不會影響使用其他細部的功能	 
+	 
