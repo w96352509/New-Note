@@ -2,6 +2,10 @@
 
 9/20 spring IOC DI 概念 / spring Bean 概念(待加強)
 
+9/21 學校處理事情
+
+9/22 設計模式(參考資料書籍)
+
 練習檔 : https://github.com/w96352509/springHome
 
 紀錄沒聽過的詞 : mock(java 測試框架)
