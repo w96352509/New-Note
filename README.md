@@ -4,7 +4,7 @@
 
 9/21 學校處理事情
 
-9/22 學校處理事情 / 設計模式(參考資料書籍 p.13)
+9/22 學校處理事情 / 設計模式(參考資料書籍 p.15)
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
 
