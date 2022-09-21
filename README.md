@@ -6,7 +6,7 @@
 
 9/22 學校處理事情 / 設計模式(參考資料書籍)
 
-練習檔 : https://github.com/w96352509/springHome
+設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
 
 紀錄沒聽過的詞 : mock(java 測試框架)
 
