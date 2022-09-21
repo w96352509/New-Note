@@ -48,8 +48,20 @@
 	結語 : 由此得知涉及<維護> 為了<再利用> 使用 extends 不會有好結果
 
   優化 1 -> 把可能需要變動的程式獨立出來 (quack() / fly()) 並提供介面讓細部動作去實做
-    一.
+    
+	一. 介面 <--- 細部功能
      interface : Fly -> fly()     <--- FlyYes -> fly(實踐飛行) / FlyNo -> fly(啥都不做) 
 	 interface : Quack -> quack() <--- YesQuack -> quack(叫)   / YesQuack -> quack(不叫) / 等等叫聲...
-     // 讓 Fly 與 Quack 物件可被再三利用 , 新增細部功能時也不會影響使用其他細部的功能	 
+     // 讓 Fly 與 Quack 物件可被再三利用 , 新增細部功能時也不會影響使用其他細部的功能
+
+    二. 設定 Duck
+      class Duck : 宣告介面 : Fly fly , Quack quack
+	               方法     : swim() / abstract display() / 
+				              total(Fly fly , Quack quack){swim() , display() , fly.fly() , quack.quack()}  
+	
+	三. 設定其他種類 Duck : RubberDuck extends Duck
+      class RubberDuck    :覆寫 display();
+
+    四. Main -> Duck RubberDuck = new RubberDuck(); -> RubberDuck.total(new NFly(), new YQuack());	  
+	                  	
 	 
