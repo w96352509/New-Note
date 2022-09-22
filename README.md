@@ -4,9 +4,13 @@
 
 9/21 學校處理事情
 
-9/22 學校處理事情 / 設計模式(參考資料書籍 p.15)
+9/22 學校處理事情 / 設計模式(參考資料書籍第一章:策略模式 / 網址進度 : 基礎工廠模式 / 策略模式)
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
+
+參考書籍 : 深入淺出設計模式 
+
+參考網址 : https://ithelp.ithome.com.tw/articles/10201706
 
 紀錄沒聽過的詞 : mock(java 測試框架)
 
