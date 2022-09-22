@@ -1,6 +1,7 @@
 設計概念 :
  1. 把可能需要變動的程式獨立出來
  2. 方法針對介面處理 // "執行時"期動態的"改變"
+ 3. 多用實作         // 可將細部功能封裝起來
 
 -------------------------------------------------------------------
 使用介面的用意 :
@@ -30,8 +31,33 @@
 			 3. 由工廠產生商品(客製化) -> Duck duck2 = ((DuckFactoryImpl)duckFactory).getDuck("塑膠鴨");
 			 4. 實現產品方法           -> duck.NarrativeDuck(); / duck2.NarrativeDuck();
     
-	總計 : 由 Main 得知 -> 使用者只需要知道 工廠類方法 / 產品類     			 
+	總計 : 由 Main 得知 -> 使用者只需要知道 工廠類方法 / 產品類   
+     	
+-------------------------------------------------------------------
+策略模式 :
+  前言 : 定義一系列算法 , 封裝至公共介面
+         策略模式用策略的介面來替換在某個實體中的方法 , 可以經由替換不同的策略使得物件擁有不同的行為
+		 // 相同型別可以呼叫不同方法
 
+  優點 : 靈活的替換不同的行為 / 策略拓展容易 / 少用 id else  
+
+  範本 : 
+    
+	Interface : IStrategy -> int caculate(int a , int b); // 公共介面
+
+    策略class : Add / Div / Miuns implements IStrategy
+    
+    組裝 Calculator : 
+	       private IStrategy iStrategy; 
+	       public int execute(int a , int b){return iStrategy.caculate(a,b);} // 使用 switch 更換策略
+		   public void setStrategy(DoType doType) {}                          // enum DoType{ADD , MINUS , DIVIDE}
+		   // this.iStrategy = new Add(); , this.iStrategy = new Miuns(); , this.iStrategy = new Div()
+	
+    Main : 
+	  1. 呼叫 Calculator -> 設定策略.setStrategy(DoType doType)	-> 呼叫方法.execute(1,2)
+	    
+    總計 : 由 Main 得知 -> 使用者只需要知道組裝後的物件 , 可以隨時更換策略 
+	
 ------------------------------------------------------------------- 
 書本第一章(鴨子模擬器) : 了解設計模式
   零設計模式 :
