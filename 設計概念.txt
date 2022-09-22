@@ -1,3 +1,10 @@
+範例整理 :
+ DesignPattern :
+   -> session01 :
+        DuckDesign -> 工廠練習(FactoryMode) / Book(書本範例) -> new(加入策略模式加簡單工廠模式) / old(未套模式)
+        Game       -> 策略模式練習(武器更換)
+		StrategyMode -> 策略模式練習(計算機)
+
 設計概念 :
  1. 把可能需要變動的程式獨立出來
  2. 方法針對介面處理 // "執行時"期動態的"改變"
@@ -70,7 +77,7 @@
       class plasticDuck / RedheadDuck / RubberDuck extends Duck  // RubberDuck 不會飛(問題發生)
 	  
     
-	導致 : 多次重複 / 不意改變 / 難以得知全部行為 / 改變導致全不受影響 
+	導致 : 多次重複 / 不意改變 / 難以得知全部行為 / 改變導致全不受影響 / 每隻鴨子都需要覆寫
 	結語 : 由此得知涉及<維護> 為了<再利用> 使用 extends 不會有好結果
 
   優化 1 -> 把可能需要變動的程式獨立出來 (quack() / fly()) 並提供介面讓細部動作去實做
@@ -88,6 +95,9 @@
 	三. 設定其他種類 Duck : RubberDuck extends Duck
       class RubberDuck    :覆寫 display();
 
-    四. Main -> Duck RubberDuck = new RubberDuck(); -> RubberDuck.total(new NFly(), new YQuack());	  
+    四. Main -> Duck RubberDuck = new RubberDuck(); -> RubberDuck.total(new NFly(), new YQuack());
+
+    優點 : 不確定功能獨立出來 , 不用重覆覆寫 , 設定策略即可
+	       執行實只需要呼叫主型別並呼叫所有方法設定策略	
 	                  	
 	 
