@@ -16,7 +16,7 @@
 
 英文加強 : instantiate(實例) / Defination(定義) / Generic(通用)
 
-記錄問題 : Bean 產生步驟 POJO / Configuration data -> Spring IOC Container(ApplicationContext = new ...()) -> 產出 Bean(存放於 BeanDefination 實例) ?
+Spring Bean記錄問題 : Bean 產生步驟 POJO / Configuration data -> Spring IOC Container(ApplicationContext = new ...()) -> 產出 Bean(存放於 BeanDefination 實例) ?
 
 Bean 最後會是型態是 BeanDefinition 嗎 
 
@@ -33,3 +33,7 @@ Bean 的生產步驟
 實例化 Bean 等步驟?
 
 工廠 Bean 的優點?
+
+設計模式問題 :
+
+工廠模式 工廠(類 or 方法) return 類 ? 
