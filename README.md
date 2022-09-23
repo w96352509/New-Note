@@ -4,7 +4,9 @@
 
 9/21 學校處理事情
 
-9/22 學校處理事情 / 設計模式(參考資料書籍第一章:策略模式 / 網址進度 : 基礎工廠模式 / 策略模式)
+9/22 學校處理事情 / 設計模式(參考資料書籍第一章:策略模式(p1 ~ p35)  / 網址進度 : 基礎工廠模式 / 策略模式)
+
+9/23 家中事情    / 設計模式(參考資料書籍第二章:觀察者模式(一半)(p36 ~ p63) / 網址進度 : 基礎工廠模式 / 策略模式(0))
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
 
