@@ -9,6 +9,7 @@
  1. 把可能需要變動的程式獨立出來
  2. 方法針對介面處理 // "執行時"期動態的"改變"
  3. 多用實作         // 可將細部功能封裝起來
+ 4. 盡量讓需要互相的物件之間關係鬆綁 // 觀察者模式 
 
 -------------------------------------------------------------------
 使用介面的用意 :
@@ -16,7 +17,7 @@
              -> 意味 : 宣告時不用理會執行後的物件型態
 
 -------------------------------------------------------------------
-普通工廠模式 :
+普通工廠模式 : 
   前言 : 你跟工廠說你想要的那種規格的商品      // 商品由工廠產生 
          而工廠負責製造你想要的那種規格的商品  // 工廠提供客製化方法
   
@@ -39,7 +40,9 @@
 			 4. 實現產品方法           -> duck.NarrativeDuck(); / duck2.NarrativeDuck();
     
 	總計 : 由 Main 得知 -> 使用者只需要知道 工廠類方法 / 產品類   
-     	
+
+總結: 工廠(類 or 方法) return 類 ? //  
+           	
 -------------------------------------------------------------------
 策略模式 :
   前言 : 定義一系列算法 , 封裝至公共介面
@@ -64,6 +67,28 @@
 	  1. 呼叫 Calculator -> 設定策略.setStrategy(DoType doType)	-> 呼叫方法.execute(1,2)
 	    
     總計 : 由 Main 得知 -> 使用者只需要知道組裝後的物件 , 可以隨時更換策略 
+
+總結: 使用公用介面(interface)封裝演算法(class)
+
+-------------------------------------------------------------------
+觀察者模式 : 定義了一對多的關係 , 當主題(subject)物件改變 , 訂閱者(observer)改變都會收到通知並自動更新
+  
+  前言 : 出版者(主題) + 訂閱者(觀察者) = 觀察者模式 
+         舉例 : (單)頻道(主題) -(頻道內容改變)-> (多)訂閱觀眾(得到通知)	
+         
+  
+  定義 : 每個物件都可有很多 Observer
+    
+	interface : Subject  -> registerObserver() / removeObserver() / notifyObserver() // 主題介面 , 利用介面成為觀察者 or 退出
+              : Observer -> update() // 所有 Observer 都要實踐 observer 介面 , update() 當主題改變時呼叫	
+	
+    class     : ConcreteObserver implements Observer -> update() ....
+                ConcreteSuject   extends    Subject  -> registerObserver() / removeObserver() / notifyObserver() / getset...	
+	            // 
+	
+  結語 : 
+    1. Subject 只知道 Observer 介面 // 減少知道 observer 細節
+	2. 
 	
 ------------------------------------------------------------------- 
 書本第一章(鴨子模擬器) : 了解設計模式
@@ -99,5 +124,83 @@
 
     優點 : 不確定功能獨立出來 , 不用重覆覆寫 , 設定策略即可
 	       執行實只需要呼叫主型別並呼叫所有方法設定策略	
+
+
+書本第二章(氣象監測系統) : 觀察者模式
+    
+  說明 : 氣象站 <-(取得資料) Weather 物件 -(顯示)> 顯示裝置
+         氣象站提供 : WeatherData -> getTemperature()          // 取得溫度 
+		                           / getHumidity()             // 取得濕度 
+								   / getPressure()             // 取得壓力
+								   / measurementsChanged()     // 更新資料時呼叫此方法
+
+  目前知道 : 3 個 get 方法 / 1 個被呼叫方法 / 更需要 3 個顯示(需可擴充)
+  
+  設計 :
+        interface :
+		  
+		  1. Subject        : void registerObserver(Observer o); / void removeObserver(Observer o); // 主題介面
+		                      void notifyObserver();                      
+		  
+		  2. Observer       : void update(float temp , float humidity , float pressure);  
+                              // 當氣象數據改變 , Subject 會把這些參數傳給 Observer		  
+		  
+		  3. DisplayElement : display()  // 當佈告版需要顯示資料時使用 , 因每個佈告版資料都不同 , 所以獨立出來
+        
+		Class :
+		  1. WeatherData implements Subject :
+              屬性 :
+			    1. private ArrayList<Observer> observers = new ArrayList<>(); // 多個訂閱者
+                2. private float temp;      // 溫度
+				3. private float humidity;  // 濕度
+				4. private float pressure;	// 氣壓			
+		 
+		      實踐 :
+			    1. registerObserver(Observer o){ observers.add(o); } // 新增 Observer
+                2. removeObserver(Observer o)  { int i = observers.indexOf(o); if(i>=0){observers.remove(i)}} // 刪除 Observer
+                3. notifyObserver(){ for -> observers.size() -> 得到 Observers.get(i) -> observer.update(....) } 
+				   // 更新資料給 observer				
+                
+			  方法 :	
+				1. measurementsChanged() -> 呼叫 notifyObserver();
+				2. setMeasurements(float temp , float humidity , float pressure){
+				    this.temp = temp;
+					this.humidity = humidity;
+					this.pressure = pressure;
+					measurementsChanged();  
+				   }
+            
+			2. CurrentConditionDisplay implements Observer , DisplayElement
+                屬性 :
+                  1. private float temp;
+	              2. private float humidity;
+	            
+                建構 :
+                  1. public CurrentConditionDisplay(Subject weatherData) { weatherData.registerObserver(this); }
+                     // 幫助在 Main 時 , 宣告 CurrentConditionDisplay 時並把自己加入主題
+                  
+                實踐 : 
+                  1. display() -> sout(....)
+                  2. update(float temp, float humidity, float pressure){
+				        this.temp = temp;
+						this.humidity = humidity;
+						display();
+				     }			  
+            
+			3. Main : 
+                 1. 新建具體的主題物件 WeatherData weatherData = new WeatherData();  
+                 2. 新建 Observer = CurrentConditionDisplay conditionDisplay = new CurrentConditionDisplay(weatherData); 
+				 3. 更新主題參數
+
+  方法順序 : 
+    1. Observer 建構時加入 Subject // 因此 CurrentConditionDisplay 進入 Observers 陣列中
+	2. setMeasurements(80, 65, 30) -> measurementsChanged() -> notifyObserver() -> observer.update(temp, humidity, pressure);
+	                               -> display()
+  
+  總結 : Observer 透過建構式加入 Subject 
+         Subject  透過 update 連到 Observer
+         Main 只需要知道 observer 們 , 跟設定一次 Subject 參數		 
+   
+-------------------------------------------------------------------		   
 	                  	
 	 
