@@ -8,6 +8,8 @@
 
 9/23 家中事情    / 設計模式(參考資料書籍第二章:觀察者模式(一半)(p36 ~ p63) / 網址進度 : 基礎工廠模式 / 策略模式(0))
 
+9/24 出門 + 電域叛客
+
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
 
 參考書籍 : 深入淺出設計模式 
