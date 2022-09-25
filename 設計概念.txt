@@ -4,6 +4,7 @@
         DuckDesign -> 工廠練習(FactoryMode) / Book(書本範例) -> new(加入策略模式加簡單工廠模式) / old(未套模式)
         Game       -> 策略模式練習(武器更換)
 		StrategyMode -> 策略模式練習(計算機)
+   -> session02 : book -> meteorological(氣象站訂閱者模式練習)		
 
 設計概念 :
  1. 把可能需要變動的程式獨立出來
@@ -200,7 +201,64 @@
   總結 : Observer 透過建構式加入 Subject 
          Subject  透過 update 連到 Observer
          Main 只需要知道 observer 們 , 跟設定一次 Subject 參數		 
-   
+
+
+書本第二章(氣象監測系統) : 觀察者模式套用 java.util. Observable(class) / Observer(Interface) 
+  優點 : 省去資料結構
+  
+  說明 : 氣象站 <-(取得資料) Weather 物件 -(顯示)> 顯示裝置 
+         氣象站提供 : WeatherData -> getTemperature()          // 取得溫度 
+		                           / getHumidity()             // 取得濕度 
+								   / getPressure()             // 取得壓力
+								   / measurementsChanged()     // 更新資料時呼叫此方法
+
+  								   
+  操作 : 主題物件 extends Observable / 訂閱者 implements Observer
+     
+  實作 : 
+    1. WeatherData extends Observable
+         屬性 :
+           private float temp;
+	       private float humidity;
+	       private float pressure;
+
+         實踐 :
+           1. 無參建構式
+           2. get...
+           3. measurementsChanged(){ setChanged(); , notifyObservers(); } 
+		      // 紀錄並呼叫 , 呼叫 notifyObserves() 前需呼叫 setChanged
+              // notifyObserves() 拉取 / notifyObservers(Object args); 推送			  
+      
+	       4. setMeasurements(float temp , float humidity , float pressure){
+				    this.temp = temp;
+					this.humidity = humidity;
+					this.pressure = pressure;
+					measurementsChanged();  
+			   }
+
+    2. CurrentConditionDisplay implements Observer , DisplayElement
+	     屬性 :
+		   private float temp;
+		   private float humidity;
+		   Observable observable;
+		 
+         實踐 :
+           1. 建構式(Observable observable) -> observable.add(this);
+           2. @Override -> display();
+           3. @Override -> update(){
+		        if (o instanceof WeatherData) {  // 如果 Observable 是 Weather 的訂閱者
+				    WeatherData weatherData = (WeatherData)o; // 呼叫主題
+				    this.temp = weatherData.getTemp();
+				    this.humidity = weatherData.getHumidity();
+				    display();
+				}
+		      }		   
+	
+    總結 : 
+      1. 省略資料結構宣告
+      2. setChanged(); 紀錄 -> notifyObservers(); (拉取) / notifyObservers(Object args); (提取)
+
+	  
 -------------------------------------------------------------------		   
 	                  	
 	 
