@@ -10,7 +10,12 @@
 
 9/24 出門 + 電域叛客
 
-9/25 出門 + 設計模式(參考資料書籍第二章:觀察者模式(使用JavaAPI) / 1.5 hr
+9/25 出門 + 設計模式(參考資料書籍第二章:觀察者模式(使用JavaAPI) / 2 hr
+
+9/26 學校 + 補習(第2輪第一部分(Java基礎))
+
+9/27 網址進度 : 單例模式 + 設計模式(參考資料書籍第三章) / 總複習 
+
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
 
