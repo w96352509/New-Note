@@ -49,4 +49,6 @@ Bean 的生產步驟
 
   工廠模式 工廠可以是(類 or 方法) return new 類() ? 
 
+  extreds SpringJpa 是單例模式?
+
 instanceof 是 Java 的保留关键字。它的作用是测试它左边的对象是否是它右边的类的实例，返回 boolean 的数据类型。
