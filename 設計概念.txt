@@ -139,8 +139,10 @@
     class SingleObject(){
       private static SingleObject object = new SingleObject(); // 創建自己為對象
       
-      private SingleObject(){}                                 // 將建構式為 private 呼叫時部會創建實例
+      private SingleObject(){}                                 // 這樣其他物件就沒辦法直接用new來取得新的實體
       
+                                                               
+							       // 因為constructor已經private，所以需要另外提供方法讓其他程式調用這個類別
       public static getSingleObject(){                         // 唯一提供取得自身實力的方法
         return object;
       }
