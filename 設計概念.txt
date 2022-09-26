@@ -125,7 +125,15 @@
   
   Singleton：很簡單的只有一個類別，其中提供存取自己物件的方法，確保整個系統只有實例化一個物件。
 
-  舉例 :
+  模式 :
+   1. 懶散(Lazy)模式（線程不安全）
+   2. 懶散模式（線程安全）
+   3. 積極模式                   : 需告時就初始化
+   4. 雙重鎖 (Double ChockLock)
+   5. 登記式（靜態內部類）
+   6. 枚舉 (enumeration)
+  
+  舉例(積極) :
     class SingleObject(){
       private static SingleObject object = new SingleObject(); // 創建自己為對象
       
