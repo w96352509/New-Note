@@ -29,6 +29,8 @@
 使用介面的用意 :
  關鍵 "多型" -> 執行時會根據情況到真正的行為不會被綁死到超類別 -(得知)> 變數宣告應該是超類型(抽象 or 介面)
              -> 意味 : 宣告時不用理會執行後的物件型態
+ 
+ 可以類似多重繼承
 
 -------------------------------------------------------------------
 
@@ -123,7 +125,17 @@
   
   Singleton：很簡單的只有一個類別，其中提供存取自己物件的方法，確保整個系統只有實例化一個物件。
 
-
+  舉例 :
+    class SingleObject(){
+      private static SingleObject object = new SingleObject(); // 創建自己為對象
+      
+      private SingleObject(){}                                 // 將建構式為 private 呼叫時部會創建實例
+      
+      public static getSingleObject(){                         // 唯一提供取得自身實力的方法
+        return object;
+      }
+      
+    }
 
 
 
