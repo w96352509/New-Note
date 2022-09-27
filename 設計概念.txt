@@ -6,13 +6,15 @@
 		StrategyMode -> 策略模式練習(計算機)
    -> session02 : book  -> meteorological (氣象站訂閱者模式練習)		
                            meteorological2(氣象站訂閱者模式練習) // 使用 JavaAPI
-			      Drink -> 工廠模式			  
+			      Drink -> 工廠模式	
+                  phone -> 工廠 + 訂閱者				  
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
- 2. 方法針對介面處理 // "執行時"期動態的"改變"
- 3. 多用實作         // 可將細部功能封裝起來
- 4. 盡量讓需要互相的物件之間關係鬆綁 // 觀察者模式 
+ 2. 方法針對介面處理                            // "執行時"期動態的"改變"
+ 3. 多用實作                                    // 可將細部功能封裝起來
+ 4. 盡量讓需要互相的物件之間關係鬆綁            // 觀察者模式 
+ 5. 類別應該開放 , 以便擴充 , 也該關閉禁止修改  // OCP 開放關閉原則
 
 系統是什麼 :
  1. 實現某些功能
@@ -22,6 +24,16 @@
  5. 程式碼堆砌而成
 
 設計模式很像模組 , 由物件導向特性組成 
+-------------------------------------------------------------------
+
+
+目錄 :
+ 1. 策略模式   : 當相同方法於不同物件時要有不同實作時使用
+ 2. 工廠模式   : 需要重複宣告物件時可以統一起來呼叫
+ 3. 訂閱者模式 : 1 對 多 時使用
+ 4. 單例模式   : 全部人使用同一個類別
+ 5. 裝飾者模式 : 想要隨時更改物件方法時使用
+
 
 -------------------------------------------------------------------
 
@@ -363,8 +375,54 @@
 
   
 書本第三章(咖啡店) : 裝飾者模式
-  說明 :
-	  
+  
+  說明 : 飲料(Beverage) -> 咖啡加上摩卡跟奶泡 
+    1. 咖啡物件 extends Beverage 的 cost();
+    2. 建立摩卡物件將咖啡物件包(Warp)起 // 裝飾者的型態為被裝飾者 
+    3. 建立奶泡物件將摩卡物件包(Warp)起	
+	4. 計算 cost 從外往內              			   
+    5. 以上知道 -> 
+         5-1. 裝飾者與被裝飾者的父類別相同
+         5-2. 裝飾者可(1/多)
+         5-3. 裝飾者可隨意時機(裝飾前/後)加入新方法
+
+  優點 : 動態的將方法加於物件上 , 比繼承更有彈性		 
+  
+  設計 :
+    class : 
+	  1. Beverage -> getDescription(); / abstract cost(); // 被裝飾者
+	  2. HouseBlend / DarkRoast // 裝飾者
+      3. CondimentDecorator -> 呼叫 getDescription();     // 用於擴充 Beverage 
+      4. Milk / Mocha / Whip 	  
+  
+  實作 :
+    
+	1. Beverage           -> String description / getDescription() { return description; } / abstract double cost();
+	
+	2. CondimentDecorator extends Beverage -> public abstract String getDescription(); // 用於改變加料後的描述
+  	
+    3. DarkRoast extends Beverage (飲料) -> DarkRoast() { description = "DarkRoast"; } // 設定飲料描述用
+                                         -> cost() -> return 0.0;                      // 覆寫 cost()
+		 									   
+    4. Mocha extends CondimentDecorator (料) 
+	     -> 紀錄被裝飾者     : Beverage beverage;                                           // 紀錄被裝飾者
+		 -> 宣告實放入被裝者 : public Mocha(Beverage beverage){ this.beverage = beverage; } // 配合上方取得被裝飾者
+		 -> 覆寫 getDescription(){ return beverage.getDescription()+", Mocha"; }            // 取得先前描述
+		 ->                cost(){ return .20+beverage.cost();  }                           // 價格 + 被裝飾者的價格
+	
+	5. Main 呼叫
+         1. 無加料 = 裝飾飲品 -> Beverage beverage = new DarkRoast();
+         
+         2. 有加料 = 裝飾飲品 + 裝飾料 -> Beverage beverage2 = new DarkRoast(); / beverage2 = new Mocha(beverage);		 
+	
+  順序 :
+    1. Beverage(被裝飾者) -> DarkRoast(裝飾者)    
+	                      -> CondimentDecorator(裝飾者(可有可無為了提醒自己要改描述跟分類料與飲)) -> Mocha(裝飾者)
+	
+	2. 特性 : 裝飾者與被裝飾者的父類別相同
+
+  總結 : 主要靠多型與繼承完成   
+						  
 -------------------------------------------------------------------		   
 	                  	
 	 
