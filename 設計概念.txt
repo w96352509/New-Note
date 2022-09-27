@@ -4,10 +4,14 @@
         DuckDesign -> 工廠練習(FactoryMode) / Book(書本範例) -> new(加入策略模式加簡單工廠模式) / old(未套模式)
         Game       -> 策略模式練習(武器更換)
 		StrategyMode -> 策略模式練習(計算機)
+   
    -> session02 : book  -> meteorological (氣象站訂閱者模式練習)		
                            meteorological2(氣象站訂閱者模式練習) // 使用 JavaAPI
 			      Drink -> 工廠模式	
-                  phone -> 工廠 + 訂閱者				  
+                  phone -> 工廠 + 訂閱者
+   
+   -> session03	: Decorator -> (書中的咖啡店練習裝飾模式)
+                  SingletonFactory -> (網上單例模式)   
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
