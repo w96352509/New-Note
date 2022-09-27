@@ -29,8 +29,6 @@
 使用介面的用意 :
  關鍵 "多型" -> 執行時會根據情況到真正的行為不會被綁死到超類別 -(得知)> 變數宣告應該是超類型(抽象 or 介面)
              -> 意味 : 宣告時不用理會執行後的物件型態
- 
- 可以類似多重繼承
 
 -------------------------------------------------------------------
 
@@ -115,8 +113,9 @@
 	3. Subject 與 Observer 是鬆綁關系 : Subject 不知道 Observer 的細節
 	4. 多 Observer 不可依賴特定順序
 	5. 也可透過 java.util. Observable(class) 完成(下方範例)
-	
-------------------------------------------------------------------- 
+
+
+-------------------------------------------------------------------
 
 
 單例模式 : 只有一個實例，而且自行實例化並向整個系統提供這個實例
@@ -130,28 +129,71 @@
   模式 :
    1. 懶散(Lazy)模式（線程不安全）
    2. 懶散模式（線程安全）
-   3. 積極模式                   : 需告時就初始化
+   3. 積極模式                   
    4. 雙重鎖 (Double ChockLock)
-   5. 登記式（靜態內部類）
+   5. 登記式（靜態內部類）: 可以確保線程安全，保證物件唯一性，並且延遲實例化，所以推薦使用
    6. 枚舉 (enumeration)
-  
-  舉例(積極) :
-    class SingleObject(){
-      private static SingleObject object = new SingleObject(); // 創建自己為對象
-      
-      private SingleObject(){}                                 // 這樣其他物件就沒辦法直接用new來取得新的實體
-      
-                                                               
-							       // 因為constructor已經private，所以需要另外提供方法讓其他程式調用這個類別
-      public static getSingleObject(){                         // 唯一提供取得自身實力的方法
-        return object;
-      }
-      
-    }
+   
+  舉例 :
+    class : SingleObject
+      -> private static SingleObject instance                       // 創建對象
+      -> private SingleObject(){}	                                // 建構式為 private 只能透過其他方法來調用這個類
+      -> public static SingleObject getInstance(){return instance;}	// 唯一可以獲取對象(自己)  
 
+      1. 積極模式(宣告時初始化) : 
+	       private static SingleObject instance = new SingleObject(); 
+      
+	  2. 懶散模式(呼叫獲取方法時(getInstance())才進行初始化) :
+           public static synchronized Singleton getInstance(){   // synchronized 確保物件唯一性(防止多 Thread)
+                                                                 // 每次呼叫都需要同步(效率低)		   
+		     if (instance == null)
+				{
+					instance = new Singleton();
+				}
+					return instance;
+		   } 	  
+      
+	  3. 雙重鎖 DLC (將懶散模式的同步改放到第二層)
+	       public static Singleton getInstance(){
 
+		   // 第一層判斷為了避免不必要的同步
+		   if(instance == null){
+					
+		     synchronized (Singleton.class){
+		       // 第二層判斷為了在null的狀況下建立實例
+			   if(instance == null)
+			     {
+					instance = new Singleton();
+				 }
+			 }
 
--------------------------------------------------------------------
+		   }
+           return instance;
+		}
+		
+      4. 登記式(靜態內部類) 		
+           public class : StaticInnerClass       -> (private 建構式) / getInstance( StaticInnerClassHolder.instance; ) 取得內部類別
+		   static class : StaticInnerClassHolder -> private static StaticInnerClass instance = new StaticInnerClass();        
+
+  範例(工廠模式 + 登記式) :
+    interface :
+	  Factory : Product getProduct();
+ 
+	class : 
+	  Product : -> getName(){ return this.getClass().getSimpleName(); }
+	  
+	  Cola / Humberger extends Product
+	  
+	  // 工廠
+	  SingletonFactory : 取得內部類別方法 :
+	                     內部類別 : ColaFactory & HumbergerFactory implements Factory / 初始化宣告工廠 / private 建構式 / 
+						            實踐 getProduct(){ return new ... }; 
+	  
+  結語 : 可以確保類別只有一個實例 / 可以提供全局訪問點 
+         全部人使用同一個類別(全部人喝同一口井概念)
+
+------------------------------------------------------------------- 
+
 
 書本第一章(鴨子模擬器) : 了解設計模式
   零設計模式 :
