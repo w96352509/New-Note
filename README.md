@@ -14,7 +14,7 @@
 
 9/26 雜事 + 補習(第2輪第一部分(Java基礎))
 
-9/27 網址進度 : 單例模式 + 設計模式(參考資料書籍第三章) / 總複習 
+9/27 網址進度 : 單例模式(不太懂) + 設計模式(參考資料書籍第三章) 
 
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
