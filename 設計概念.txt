@@ -1,4 +1,5 @@
 範例整理 :
+ in SpringBoot-PSI-2022
  DesignPattern :
    -> session01 :
         DuckDesign -> 工廠練習(FactoryMode) / Book(書本範例) -> new(加入策略模式加簡單工廠模式) / old(未套模式)
@@ -11,7 +12,8 @@
                   phone -> 工廠 + 訂閱者
    
    -> session03	: Decorator -> (書中的咖啡店練習裝飾模式)
-                  SingletonFactory -> (網上單例模式)   
+                  SingletonFactory -> (網上單例模式) 
+                  IO -> (了解 IO 屬於裝飾者模式)				  
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
@@ -32,185 +34,28 @@
 
 
 目錄 :
- 1. 策略模式   : 當相同方法於不同物件時要有不同實作時使用
- 2. 工廠模式   : 需要重複宣告物件時可以統一起來呼叫
- 3. 訂閱者模式 : 1 對 多 時使用
- 4. 單例模式   : 全部人使用同一個類別
- 5. 裝飾者模式 : 想要隨時更改物件方法時使用
+  1. 策略模式 : 封裝了演算法家族 , 個別封裝起來 , 根據呼叫不同的類進行調用
+       
+  2. 工廠模式 : 定義一個用於建立物品的介面 , 讓子類決定實體化哪一個類別 
+  
+  3. 訂閱者模式 : 
+       1. 物件之間定義 1 對 多 的關係
+       2. Subject 透果共同介面更新 Observer
+       3. 採用鬆綁方式(互相不知道對方細節)
+       4. 有多個 Observer 不可規定順序
+       5. JavaAPI -> Observerable	
+
+  4. 單例模式   : 全部人使用同一個類別	   
+  
+  5. 裝飾者模式 :
+       1. 繼承屬於擴充方式之一 , 但彈性不佳
+	   2. 在設計中需要動態新增 + 允許被擴充等
+	   3. 裝飾者模式 = 一群裝飾類別用來封裝具象元件
+	   4. 裝飾者型態 = 被裝飾者型態
+	   5. 會導致多數小類別
 
 
 -------------------------------------------------------------------
-
-
-使用介面的用意 :
- 關鍵 "多型" -> 執行時會根據情況到真正的行為不會被綁死到超類別 -(得知)> 變數宣告應該是超類型(抽象 or 介面)
-             -> 意味 : 宣告時不用理會執行後的物件型態
-
--------------------------------------------------------------------
-
-
-普通工廠模式 : 
-  前言 : 你跟工廠說你想要的那種規格的商品      // 商品由工廠產生 
-         而工廠負責製造你想要的那種規格的商品  // 工廠提供客製化方法
-  
-  優點 : 客製化 / 工廠類用於建立物件 / 只需要知道具體產品類名(Duck) / 防止對資料的破壞實現多型((DuckFactoryImpl)duckFactory)
-  
-  範本 : 
-    
-	Product : 
-	         介面 : Duck -> void NarrativeDuck();
-             類別 : DuckImpl implements Duck -> String type / 有無參數建構式 / 覆寫 NarrativeDuck();
-    
-	Factory :
-             介面 : DuckFactory -> Duck getDuck();
-             類別 :	DuckFactoryImpl implements DuckFactory -> 覆寫 Duck getDuck() return new Duck; / 
-			                                                  超載 Duck getDuck(String type) return new Duck(type); 
-    Main :
-             1. 呼叫工廠               -> DuckFactory duckFactory = new DuckFactoryImpl(); 	
-             2. 由工廠產生商品         -> Duck duck  = duckFactory.getDuck();
-			 3. 由工廠產生商品(客製化) -> Duck duck2 = ((DuckFactoryImpl)duckFactory).getDuck("塑膠鴨");
-			 4. 實現產品方法           -> duck.NarrativeDuck(); / duck2.NarrativeDuck();
-    
-	總計 : 由 Main 得知 -> 使用者只需要知道 工廠類方法 / 產品類   
-
-總結: 工廠(類 or 方法) return 類 ? //  
-
-           	
--------------------------------------------------------------------
-
-
-策略模式 :
-  前言 : 定義一系列算法 , 封裝至公共介面
-         策略模式用策略的介面來替換在某個實體中的方法 , 可以經由替換不同的策略使得物件擁有不同的行為
-		 // 相同型別可以呼叫不同方法
-
-  優點 : 靈活的替換不同的行為 / 策略拓展容易 / 少用 id else  
-
-  範本 : 
-    
-	Interface : IStrategy -> int caculate(int a , int b); // 公共介面
-
-    策略class : Add / Div / Miuns implements IStrategy
-    
-    組裝 Calculator : 
-	       private IStrategy iStrategy; 
-	       public int execute(int a , int b){return iStrategy.caculate(a,b);} // 使用 switch 更換策略
-		   public void setStrategy(DoType doType) {}                          // enum DoType{ADD , MINUS , DIVIDE}
-		   // this.iStrategy = new Add(); , this.iStrategy = new Miuns(); , this.iStrategy = new Div()
-	
-    Main : 
-	  1. 呼叫 Calculator -> 設定策略.setStrategy(DoType doType)	-> 呼叫方法.execute(1,2)
-	    
-    總計 : 由 Main 得知 -> 使用者只需要知道組裝後的物件 , 可以隨時更換策略 
-
-總結: 使用公用介面(interface)封裝演算法(class)
-
--------------------------------------------------------------------
-
-
-觀察者模式 : 定義了一對多的關係 , 當主題(subject)物件改變 , 訂閱者(observer)改變都會收到通知並自動更新
-  
-  前言 : 出版者(主題) + 訂閱者(觀察者) = 觀察者模式 
-         舉例 : (單)頻道(主題) -(頻道內容改變)-> (多)訂閱觀眾(得到通知)	
-         
-  
-  定義 : 每個物件都可有很多 Observer
-    
-	interface : Subject  -> registerObserver() / removeObserver() / notifyObserver() // 主題介面 , 利用介面成為觀察者 or 退出
-              : Observer -> update() // 所有 Observer 都要實踐 observer 介面 , update() 當主題改變時呼叫	
-	
-    class     : ConcreteObserver implements Observer -> update() ....
-                ConcreteSuject   extends    Subject  -> registerObserver() / removeObserver() / notifyObserver() / getset...	
-	            // 
-	
-  結語 : 
-    1. 觀察者模式定義 1 對多
-    2. 主題更新 Observer 是透過共同介面
-	3. Subject 與 Observer 是鬆綁關系 : Subject 不知道 Observer 的細節
-	4. 多 Observer 不可依賴特定順序
-	5. 也可透過 java.util. Observable(class) 完成(下方範例)
-
-
--------------------------------------------------------------------
-
-
-單例模式 : 只有一個實例，而且自行實例化並向整個系統提供這個實例
-
-  前言 : 類別只提供創建自己類別的方法
-  
-  目的 ： 保證一個類別只會產生一個物件，而且要提供存取該物件的統一方法
-  
-  Singleton：很簡單的只有一個類別，其中提供存取自己物件的方法，確保整個系統只有實例化一個物件。
-
-  模式 :
-   1. 懶散(Lazy)模式（線程不安全）
-   2. 懶散模式（線程安全）
-   3. 積極模式                   
-   4. 雙重鎖 (Double ChockLock)
-   5. 登記式（靜態內部類）: 可以確保線程安全，保證物件唯一性，並且延遲實例化，所以推薦使用
-   6. 枚舉 (enumeration)
-   
-  舉例 :
-    class : SingleObject
-      -> private static SingleObject instance                       // 創建對象
-      -> private SingleObject(){}	                                // 建構式為 private 只能透過其他方法來調用這個類
-      -> public static SingleObject getInstance(){return instance;}	// 唯一可以獲取對象(自己)  
-
-      1. 積極模式(宣告時初始化) : 
-	       private static SingleObject instance = new SingleObject(); 
-      
-	  2. 懶散模式(呼叫獲取方法時(getInstance())才進行初始化) :
-           public static synchronized Singleton getInstance(){   // synchronized 確保物件唯一性(防止多 Thread)
-                                                                 // 每次呼叫都需要同步(效率低)		   
-		     if (instance == null)
-				{
-					instance = new Singleton();
-				}
-					return instance;
-		   } 	  
-      
-	  3. 雙重鎖 DLC (將懶散模式的同步改放到第二層)
-	       public static Singleton getInstance(){
-
-		   // 第一層判斷為了避免不必要的同步
-		   if(instance == null){
-					
-		     synchronized (Singleton.class){
-		       // 第二層判斷為了在null的狀況下建立實例
-			   if(instance == null)
-			     {
-					instance = new Singleton();
-				 }
-			 }
-
-		   }
-           return instance;
-		}
-		
-      4. 登記式(靜態內部類) 		
-           public class : StaticInnerClass       -> (private 建構式) / getInstance( StaticInnerClassHolder.instance; ) 取得內部類別
-		   static class : StaticInnerClassHolder -> private static StaticInnerClass instance = new StaticInnerClass();        
-
-  範例(工廠模式 + 登記式) :
-    interface :
-	  Factory : Product getProduct();
- 
-	class : 
-	  Product : -> getName(){ return this.getClass().getSimpleName(); }
-	  
-	  Cola / Humberger extends Product
-	  
-	  // 工廠
-	  SingletonFactory : 取得內部類別方法 :
-	                     內部類別 : ColaFactory & HumbergerFactory implements Factory / 初始化宣告工廠 / private 建構式 / 
-						            實踐 getProduct(){ return new ... }; 
-	  
-  結語 : 可以確保類別只有一個實例 / 可以提供全局訪問點 
-         全部人使用同一個類別(全部人喝同一口井概念)
-
-------------------------------------------------------------------- 
-
-
 書本第一章(鴨子模擬器) : 了解設計模式
   零設計模式 :
     一.
@@ -246,6 +91,7 @@
 	       執行實只需要呼叫主型別並呼叫所有方法設定策略	
 
 
+-------------------------------------------------------------------
 書本第二章(氣象監測系統) : 觀察者模式
     
   說明 : 氣象站 <-(取得資料) Weather 物件 -(顯示)> 顯示裝置
@@ -377,7 +223,8 @@
            1. 省略資料結構宣告
            2. setChanged(); 紀錄 -> notifyObservers(); (拉取) / notifyObservers(Object args); (推送)
 
-  
+
+-------------------------------------------------------------------  
 書本第三章(咖啡店) : 裝飾者模式
   
   說明 : 飲料(Beverage) -> 咖啡加上摩卡跟奶泡 
@@ -425,8 +272,9 @@
 	
 	2. 特性 : 裝飾者與被裝飾者的父類別相同
 
-  總結 : 主要靠多型與繼承完成   
-						  
+  總結 : 主要靠多型與繼承基底完成   
+		
+		
 -------------------------------------------------------------------		   
-	                  	
+書本第四章():工廠模式	                  	
 	 
