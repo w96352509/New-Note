@@ -19,7 +19,7 @@
 
 9/27 網址進度 : 單例模式(不太懂) + (複習訂閱者 + 工廠模式) + 設計模式(參考資料書籍第三章(未完成p79(99)-109)) / 5hr 
 
-9/28 學校 + 整理複習目前 + 補完設計模式(參考資料書籍第三章(未完成p79(99)-109)) 
+9/28 學校 + 整理複習目前(OK) + 補完設計模式(參考資料書籍第三章(未完成p79(99)-109)) 
 
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
