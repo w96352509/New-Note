@@ -16,11 +16,22 @@
  1. 系統設計三大要件 : 再利用 / 可擴充 / 可維護
  2. 把易動部份抽出來封裝
 
+使用介面的用意 :
+ 1. 類別可以繼承多個介面(主要?)
+ 2. 所有的類都可以實現
+ 3. 變數只能調用不可更改(如需用到變數使用抽象 class)
 
 ---------------------------------------------------------
-  1. 策略模式 : 封裝了演算法家族 , 個別封裝起來 , 根據呼叫不同的類進行調用
-       
-  2. 工廠模式 : 定義一個用於建立物品的介面 , 讓子類決定實體化哪一個類別 
+  1. 策略模式 : 
+       1. 將一系列演算法封裝起來。
+       2. 使用者可以根據狀況選擇自己需要的演算法。
+  
+  
+  2. 工廠模式
+       1. 主要的角色有工廠和產品。
+       2. 利用一個工廠的開放給想要商品的人。
+       3. 使用者需要透過工廠取得商品。
+
   
   3. 訂閱者模式 : 
        1. 物件之間定義 1 對 多 的關係
@@ -29,7 +40,10 @@
        4. 有多個 Observer 不可規定順序
        5. JavaAPI -> Observerable	
 
-  4. 單例模式   : 全部人使用同一個類別	   
+  4. 單例模式   : 
+       1. 一個單一的類別。
+       2. 確保只有一個實例被創建。
+       3. 使用者透過開放的方法取得該實例。  
   
   5. 裝飾者模式 :
        1. 繼承屬於擴充方式之一 , 但彈性不佳
@@ -70,14 +84,6 @@
 
            	
 -------------------------------------------------------------------
-
-
-使用介面的用意 :
- 1. 類別可以繼承多個介面(主要?)
- 2. 所有的類都可以實現
-  
-
-
 
 
 策略模式 :
@@ -225,3 +231,41 @@
   結語 :
 
 -------------------------------------------------------------------	   
+
+
+練習 :
+ 
+  1. beveragestore(策略模式) :
+       說明 : 飲料套用各種折價方式
+	   實踐 :
+	     1. 折價方式 : 每種折價該有 (折價方式 / 優惠價格(discount)) 有變數有變動方式所以套用 "抽象類別完成共同介面"
+         2. 所需 :
+              double discount;
+              private IDiscountStrategy(){} // 刻意使用 private 讓子類都必須帶入 discount
+			  public IDiscountStrategy(double discount){ this.discount = discount; }
+			  abstract public double getValue(double value);
+		 
+		 3. 各折扣 extends IDiscountStrategy:
+              MinusDiscount    -> getValue(value - discount);
+			  NoneDiscount     -> getValue(value)
+			  MultiplyStrategy -> getValue(value * discount)
+		
+         4. 飲料介面 : 
+              預設折扣 -> NoneDiscount
+              飲料價格分成 -> 有折扣 / 無折扣
+			  將取得價格封裝起來
+		 
+		 5. 所需
+		      IDiscountStrategy discountStrategy = new NoneDiscount(1);
+			  double value;
+			  private Drink(){}
+			  public Drink(double value) { this.value = value; }
+			  public Drink(double value , IDiscountStrategy discountStrategy) 
+			    { this.value = value; this.discountStrategy = discountStrategy;}
+			  public double getValue() { return discountStrategy.getValue(value); }
+         
+		 6. 各種飲品 extends Drink	
+
+         7. 飲料訂單 : 準備 List 加入飲料並算出總價	
+
+         		 
