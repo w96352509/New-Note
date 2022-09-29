@@ -13,7 +13,10 @@
    
    -> session03	: Decorator -> (書中的咖啡店練習裝飾模式)
                   SingletonFactory -> (網上單例模式) 
-                  IO -> (了解 IO 屬於裝飾者模式)				  
+                  IO -> (了解 IO 屬於裝飾者模式)	
+   
+   -> session04 : beveragestore -> (網站上的策略模式練習)
+                  beveragestore2 -> (網站上的策略模式練習套用工廠)   
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
