@@ -21,7 +21,9 @@
 
 9/28 學校 + 整理複習目前(OK) + 補完設計模式(參考資料書籍第三章(未完成p79(99)-109)OK IO 部分) / 3 hr
 
-9/29 參考網址(day6 + day7) + 書籍(第四章工廠模式)
+9/29 看醫生
+
+9/30 參考網址(day6 + day7) + 書籍(第四章工廠模式) + 補習
 
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
