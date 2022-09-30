@@ -23,7 +23,12 @@
 
 9/29 看醫生
 
-9/30 參考網址(day6(OK) + day7(OK)) + 書籍(第四章工廠模式(p109(129)-168)) + 補習
+9/30 參考網址(day6(OK) + day7(OK)) + 書籍(第四章工廠模式(p109(129)-168)) + 補習 / 6 hr
+
+10/01 書籍(第四章工廠模式(p109(129)-168))
+
+10/02 書籍(第四章工廠模式(p109(129)-168))
+
 
 
 設計練習檔 : https://github.com/w96352509/PSI-SpringBoot-2022/tree/master/SpringBoot-PSI-2022/src/test/java/com/study/springmvc/DesignPattern/session01/DuckDesign
