@@ -15,6 +15,7 @@
 備註 :
  1. 系統設計三大要件 : 再利用 / 可擴充 / 可維護
  2. 把易動部份抽出來封裝
+ 3. 別為了設計模式而強制套設計模式
 
 使用介面的用意 :
  1. 類別可以繼承多個介面(主要?)
@@ -222,13 +223,34 @@
 
 裝飾者模式 :
   
-  前言 :
+  前言 : 裝飾模式的角色有元件和裝飾，裝飾需要建構在被裝飾的元件上
+         是一種繼承關係的替代方案
+		 裝飾物不同但是元件的本質不變
 
-  定義 :
+  定義 : 動態的給一個類別添加額外的職責。就增加功能來說，裝飾模式相比產生子類別更為靈活
+        
+  UML  : 
+         1. Component                            // 被裝飾者核心(飲料)
+         2. Concrete Component extends Component // 具體裝飾者  (飲料種類)
+         3. Decorator extends Component		     // 裝飾核心的其他元件(飲料加料)
   
-  備註 : JavaI/O 也是裝飾者模式
+  備註 : JavaI/O 也是裝飾者模式 / 裝飾者們需要紀錄被裝飾者 -> private ... ... ; / 裝飾者與被裝飾者型態相同
   
-  結語 :
+  實作 :
+    
+	說明 : 不同套餐的餐點不一樣，低消需要一杯飲料
+	       商業午餐(主餐 + 沙拉) + 簡餐(湯品) + 全餐(甜品)
+	實踐 :
+	  
+	  1. 被裝飾者(class) : Restaurant -> minimumOrder() / order(){ minimumOrder() } 低消飲料
+	  2. 裝飾者 :
+	      1. BusinessLunch : private Restaurant restaurant; // 紀錄被裝飾者 , 其他方法
+		  2. 順序 + 主程式
+		    restaurant = new BusinessLunch(restaurant);
+	        restaurant = new SimpleCombo(restaurant);
+	        restaurant = new FullCombo(restaurant); 
+  
+  
 
 -------------------------------------------------------------------	   
 

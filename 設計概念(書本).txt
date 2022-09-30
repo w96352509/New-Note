@@ -15,8 +15,9 @@
                   SingletonFactory -> (網上單例模式) 
                   IO -> (了解 IO 屬於裝飾者模式)	
    
-   -> session04 : beveragestore -> (網站上的策略模式練習)
-                  beveragestore2 -> (網站上的策略模式練習套用工廠)   
+   -> session04 : beveragestore  -> (網站上的策略模式練習)
+                  beveragestore2 -> (網站上的策略模式練習套用工廠)
+                  restaurant     ->	(網站上的裝飾者模式練習)			  
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
