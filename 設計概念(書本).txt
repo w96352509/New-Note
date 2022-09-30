@@ -17,7 +17,9 @@
    
    -> session04 : beveragestore  -> (網站上的策略模式練習)
                   beveragestore2 -> (網站上的策略模式練習套用工廠)
-                  restaurant     ->	(網站上的裝飾者模式練習)			  
+                  restaurant     ->	(網站上的裝飾者模式練習)	
+                  pizza          -> (書本簡易工廠模式)
+                  pizza2         -> (書本簡易工廠模式(改參考下方))				  
 						  
 設計概念 :
  1. 把可能需要變動的程式獨立出來
@@ -280,5 +282,55 @@
 		
 		
 -------------------------------------------------------------------		   
-書本第四章():工廠模式	                  	
+書本第四章(烘焙坊):工廠模式
+  
+  筆記 :
+    1. new 聯想到 "具象" -> 介面 = new 具象類別 // 不利於修改
+    2. 因具象類別會改變所以應該要抽離出來
+    3. 封裝建立物件 -> 工廠
+    4. 簡易工廠 -> 客戶調用工廠出產品 // 工廠製造對應產品 // 統一工廠製造
+         
+		 舉例 : PizzaStore pizzaStore = new PizzaStore(new SimpleFactory());
+		        pizzaStore.PizzaOrder("葛利");
+         		 
+		 PizzaOrder :
+		   1. SimpleFactory simpleFactory ;
+		   2. simpleFactory 的建構式
+		   3. Pizza PizzaOrder(String type){
+		         Pizza pizza = simpleFactory.createPizza(type);
+				 pizza.prepare();
+				 pizza.back();
+				 pizza.cut();
+				 pizza.box();
+				 pizza.pizzaType();
+				 return pizza;
+		      }
+		 
+	5. 改變簡易工廠讓產品客製化 -> 把製造商品放到客戶中(abstract) // 各店製造
+         
+		 舉例 : PizzaStore : abstract createPizza() 提供 其他 Pizza 店 extends
+		        PizzaStore pizzaStore = new NYPizzaStore(); -> pizzaStore.PizzaOrder("葛利");
+	     
+		 PizzaOrder :
+		   
+		   1. public Pizza PizzaOrder(String type) {
+				 Pizza pizza = createPizza(type);
+				 pizza.prepare();
+				 pizza.back();
+				 pizza.cut();
+				 pizza.box();
+				 pizza.pizzaType();
+				 return pizza;
+	           }
+	
+	        2. abstract           Pizza   createPizza(String type); // 此方法類似工廠來 new 不同的 Pizza
+	          (工廠類似抽象方法 + 產品 + 建立產品實踐)
+    
+  完整實作(Pizza 工廠訂購 Pizza) :
+    
+    流程 : 比薩店 -> 下單 -> 製造 -> 處理基本步驟
+    
+    實作 :     
+
+    統整 :	
 	 
