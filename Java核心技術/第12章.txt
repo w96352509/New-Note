@@ -1,0 +1,154 @@
+線程(控制結構) : 可以不同核上使用
+	1. 操作 : 
+		Runnable task = () -> {}; // input -> body  
+		Executor exec= ...  ;     // 使用 Executor 將任務至線程上執行
+			使用 : 
+				// 會得到執行不同任務的線程池(推大量短期任務)
+				Executor exec = Executors.newCachedThreadPool();
+
+				// 取得內核數
+                int processors = Runtime.getRuntime().availableProcessors();	
+					
+				// 取得固定線程池
+				Executor exec = Executors.newFixedThreadPool(processors);
+			
+		exec.execute(task);
+	
+	2. 併發任務(多子任務 -> 完成結果合併) :
+		無設定 :
+			1. 造成無規律執行	
+		解決 :
+			1. 使用 Callable<V> 
+					ExecutorService exec = Executors.newCachedThreadPool(); or newFixedThreadPool()
+					Callable<V> task = ... ;
+					Future<V> result = exec.submit(task);
+		Future :
+			1. 得到一個計算值
+			2. 使用 :
+				get() : (阻塞)直到結果可用
+				isDone() : 知道 Future 何時完成
+			
+			3. 範例 :
+				把任務集合放入列表中使用 invokeAll(...) 提交得到 List<Future<V>> 遍歷列表調用 get()
+				
+			4. 避免等待所有任務完成(ExecutorCompletionService service = new ExecutorCompletionService(executor))	
+				將任務提交 service.submit(...); -> service.get();
+			
+			5. 範例 in google 雲端
+			
+		
+
+風險 :
+	1. 線程修改另一個線程不可見 , 有兩個原因
+		1. 緩存 		
+		2. 重排指令
+			讓變量再線程中可見(確保讓 java 編譯器與虛擬機負責) :
+				1. 變量為 final
+				2. 變量為 static 初始值在初始化後可見
+			    3. 變量為 volatile 保證編譯器與虛擬機正確工作
+				4. lock
+				
+		注意 :
+			拒絕共享 
+			不可變結構
+			加鎖(可能造成死鎖)
+
+Java API 實現並行化			
+	處理大量的內存數據   
+
+	Arrays 並行API
+		Arrays.parallelSort(words , Comparator.comparing(String :: length)); // 比正常排序快
+		
+		Arrays.parallelSetAll(values , i -> i%10);
+		
+		IntStream.of(values).parallel().sum();
+		
+使用 JavaAPI 中線程安全的數據結構 : java.util.concurrent 	
+	ConcurrentHashMap : 多執行續併發一個併發散列映射 , 一些執行續增加值 , 一些讀取
+		1. compute( value , (k , v) -> v == null ? 0 : v +1 ); // 為原子方法 
+		
+		2. putIfAbsent(values , 0L); // 給定預設值 , 如果 values 不在給定 0L 反則啥都不做
+		
+		3. merge( 鍵 , 新值  , (exValue , newValue) -> exValue + newValue ); = merge( 鍵 , 新值 , Long :: sum);
+		
+	阻塞對列(一個數組 or 一個鏈表) :	
+		ArrayBlockingQueue and LinKBlockingQueue
+			add / remove
+			put(滿) / take(空) 阻塞
+			offer / poll
+
+處理原子值
+	AtomicLong (計數器)
+		addandGet(long ); // 累加器
+		accumulateAndGet( , Math::max);	
+
+	LongAccumulator 類 // 不同組執行續處理不同的子計數器
+		LongAccumulator long = new LongAccumulator( V:: function , 0);
+		
+	// 簡單計數器使用 -> LongAdder
+
+熟悉底層鎖
+	ReentrantLock(); // 擁有此類的執行續會執行到底不會被中斷 -> lock -> unlock
+	
+	內部鎖 : synchronized(obj){}
+		public synchronized void method() {}; // 每個方法都有一個內部鎖 , 但使用同一個變量須等另一個線程結束採可調用
+		
+		wait(); // 把線程至等待回收內部鎖
+		notifyAll(); // 讓其他線程可以得到通知
+	    死鎖 : 數據結構佔有鎖
+
+Java 現成特點 :
+	程序 -> 任務 -> 執行器 -> 映射到線程
+	建構一個執行續並啟動
+		
+		Runnable task = () -> {}; // 任務
+		Thread thread = new Thread(task); // 將任務配給執行續
+		thread.start();                   // 啟動執行續
+		
+		thread.sleep(毫秒); // 暫停執行續(毫秒)
+		
+		thread.join(); // 插入執行續
+			範例 : 
+				Runnable A = () -> {} ;
+				Runnable B = () -> { a.join() } ; // 將 B 暫停直到 a 執行結束
+		
+		中斷指令 :
+			// 設定指定testThread執行緒的狀態為中斷標誌，
+			testThread.interrupt();
+
+			// 檢測當前testThread執行緒是否被外界中斷；是則返回true
+			testThread.isInterrupted();
+
+			// 檢測當前testThread執行緒是否收到中斷信令，收到信令則返回true且清除中斷狀態，重新變更為false；
+			testThread.interrupted();
+			
+			// 靜態方法，與testThread.interrupted()一樣，
+			// （檢測當前testThread執行緒是否被中斷，如果被中斷則返回true且清除中斷狀態，重新變更為未中斷狀態；）
+			// 作用於當前被執行執行緒，由於testThread內部執行緒在執行的時候，是無法獲取testThread引用的，所以如果想檢測當前自己的執行緒是否被中斷且清除中斷狀態，則可以使用Thread.interrupted()方法；
+			Thread.interrupted();
+			
+			// 此時檢測當前該執行緒是否收到外界中斷信令，true表示收到，此處獲取結果為 true
+			Thread.currentThread().isInterrupted()
+		
+				
+		
+		
+	
+		
+		
+		
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		
